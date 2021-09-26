@@ -76,6 +76,7 @@ Be aware of:
     class{'kafka':
       hostnames           => $kafka_brokers,
       zookeeper_hostnames => $zookeeper_hostnames,
+      replication         => 1,
     }
 
     node /zoo.\.example'.com/ {
@@ -353,6 +354,12 @@ Some properties are set automatically, "::undef" string explicitly removes given
 Kerberos realm. Default: ''.
 
 Non-empty value will enable security with SASL support.
+
+####`replication`
+
+Topic replication factor. Default: undef (=Kafka default 3).
+
+Offset replication factor, property *offsets.topic.replication.factor*.
 
 ####`sentry_enable`
 

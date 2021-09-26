@@ -19,6 +19,7 @@ class kafka (
   $zookeeper_hostnames = undef,
   $keytab = '/etc/security/keytab/kafka.service.keytab',
   $realm = '',
+  $replication = undef,
   $ssl = undef,
   $ssl_cacerts = $::kafka::params::cacerts,
   $ssl_cacerts_password = $::kafka::params::cacerts_password,
@@ -99,6 +100,14 @@ class kafka (
     }
   } else {
     $dir_properties = undef
+  }
+
+  if ($replication) {
+    $replication_properties = {
+      'offsets.topic.replication.factor' => $replication,
+    }
+  } else {
+    $replication_properties = undef
   }
 
   # update also "Auth to local rules" chapter
@@ -210,7 +219,7 @@ DEFAULT\
     'client' => merge($sec_properties['client'], $ssl_properties['client'], $properties_client),
     'consumer' => merge($sec_properties['client'], $ssl_properties['client'], $properties_client, $properties_consumer),
     'producer' => merge($sec_properties['client'], $ssl_properties['client'], $properties_client, $properties_producer),
-    'server' => merge($kafka_properties, $dir_properties, $sec_properties['server'], $ssl_properties['server'], $acl_properties, $sentry_properties, $properties_server),
+    'server' => merge($kafka_properties, $dir_properties, $replication_properties, $sec_properties['server'], $ssl_properties['server'], $acl_properties, $sentry_properties, $properties_server),
   }
 
   if $environment and has_key($environment, 'client') {
