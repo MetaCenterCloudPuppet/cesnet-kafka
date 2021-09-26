@@ -240,7 +240,6 @@ Some best practices:
 
 Used environment:
 
-    zoo=zoo1.example.com:2181,zoo2.example.com:2181/kafka
     brokers=broker1.example.com:9092,broker2.example.com:9092
     #SASL:     brokers=broker1.example.com:9093,broker2.example.com:9093
     #SSL:      brokers=broker1.example.com:9094,broker2.example.com:9094
@@ -248,15 +247,15 @@ Used environment:
 
 Create a topic:
 
-    kafka-topics.sh --create --zookeeper $zoo -replication-factor 1 --partitions 1 --topic test
+    kafka-topics.sh --create --bootstrap-server $brokers --command-config /etc/kafka/conf/client.properties --replication-factor 1 --partitions 1 --topic test
 
 List topics:
 
-    kafka-topics.sh --list --zookeeper $zoo
+    kafka-topics.sh --list --bootstrap-server $brokers --command-config /etc/kafka/conf/client.properties
 
 Describe a topic:
 
-    kafka-topics.sh --describe --zookeeper $zoo
+    kafka-topics.sh --describe --bootstrap-server $brokers --command-config /etc/kafka/conf/client.properties
 
 Launch consumer:
 
@@ -265,6 +264,10 @@ Launch consumer:
 Launch producer:
 
     kafka-console-producer.sh --broker-list $brokers --topic test --producer.config /etc/kafka/conf/client.properties
+
+Delete topic:
+
+    kafka-topics.sh --delete --bootstrap-server $brokers --command-config /etc/kafka/conf/client.properties --topic test
 
 ## Reference
 
